@@ -25,7 +25,7 @@ export default function MissionPage() {
           <p className="text-sm leading-6 text-ink">
             {completed
               ? "Your final identity, movie recommendations, and Film Run are unlocked."
-              : "Step into the crew. Complete each room's mission, collect credits, and unlock your filmmaker identity."}
+              : "Step into the crew. Complete each room's mission, collect credits, and discover the magic of Czech cinema."}
           </p>
           <ButtonLink
             href={completed ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`}
