@@ -44,6 +44,18 @@ export type Reward = {
   active: boolean;
 };
 
+export type CatalogMovie = {
+  id: string;
+  title: string;
+  year: number;
+  director: string;
+  country: string;
+  genre: string;
+  rating: string;
+  description: string;
+  tags: string[];
+};
+
 export type TicketType = {
   id: string;
   label: string;

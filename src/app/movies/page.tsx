@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, RotateCw, Shuffle } from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronDown, RotateCw, Shuffle } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { EmptyState } from "@/components/EmptyState";
 import { MoviePoster } from "@/components/MoviePoster";
 import { SectionHeader } from "@/components/SectionHeader";
+import { catalogMovies } from "@/data/catalogMovies";
 import { getMovie, getRecommendations, isMissionComplete } from "@/lib/progress";
+import type { CatalogMovie } from "@/types";
 import { useAppState } from "@/lib/useAppState";
 
 export default function MoviesPage() {
@@ -22,20 +24,6 @@ export default function MoviesPage() {
   });
   const pickedMovie = pickedMovieId ? getMovie(pickedMovieId) : null;
 
-  if (!complete) {
-    return (
-      <div className="content-wrap space-y-7">
-        <SectionHeader eyebrow="Movies" title="Our recommendations." />
-        <EmptyState
-          action="Take the Quiz"
-          body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
-          href="/movies/quiz"
-          title="Find your perfect film match"
-        />
-      </div>
-    );
-  }
-
   function spinReel() {
     const randomMovie = recommendations[Math.floor(Math.random() * recommendations.length)];
     setPickedMovieId(randomMovie.id);
@@ -43,78 +31,147 @@ export default function MoviesPage() {
 
   return (
     <div className="content-wrap space-y-7">
-      <SectionHeader eyebrow="Movies" title="Top 5 movies you should watch.">
-        <ActionButton icon={Shuffle} onClick={spinReel}>
-          Spin the Reel
-        </ActionButton>
-      </SectionHeader>
+      <SectionHeader eyebrow="Movies" title="Our recommendations." />
 
-      {pickedMovie ? (
-        <section className="rounded-md border border-gold/50 bg-gold/20 p-5 shadow-soft">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-ember">Spin result</p>
-              <h2 className="mt-1 text-2xl font-black text-ink">{pickedMovie.title}</h2>
-              <p className="mt-1 text-sm leading-6 text-ink/50">{pickedMovie.reason}</p>
-            </div>
-            <ButtonLink href={`/movies/${pickedMovie.id}`} icon={RotateCw} variant="secondary">
-              Open Movie
-            </ButtonLink>
-          </div>
-        </section>
-      ) : null}
+      {!complete ? (
+        <EmptyState
+          action="Take the Quiz"
+          body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
+          href="/movies/quiz"
+          title="Find your perfect film match"
+        />
+      ) : (
+        <>
+          <SectionHeader eyebrow="Movies" title="Top 5 movies you should watch.">
+            <ActionButton icon={Shuffle} onClick={spinReel}>
+              Spin the Reel
+            </ActionButton>
+          </SectionHeader>
 
-      <section className="grid gap-4 lg:grid-cols-5">
-        {recommendations.map((movie, index) => {
-          const saved = progress.savedMovies.includes(movie.id);
-          return (
-            <article className="rounded-md border border-ink/10 bg-paper/100 p-3 shadow-soft" key={movie.id}>
-              <Link href={`/movies/${movie.id}`}>
-                <MoviePoster movie={movie} />
-              </Link>
-              <div className="mt-3">
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-teal">Pick {index + 1}</p>
-                <h2 className="mt-1 text-lg font-black leading-tight text-ink">{movie.title}</h2>
-                <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/60">{movie.description}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {movie.tags.slice(0, 3).map((tag) => (
-                    <span className="rounded-sm bg-frame px-2 py-1 text-[11px] font-bold text-ink/60" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
+          {pickedMovie ? (
+            <section className="rounded-md border border-gold/50 bg-gold/20 p-5 shadow-soft">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-ember">Spin result</p>
+                  <h2 className="mt-1 text-2xl font-black text-ink">{pickedMovie.title}</h2>
+                  <p className="mt-1 text-sm leading-6 text-ink/50">{pickedMovie.reason}</p>
                 </div>
-                <ActionButton
-                  className="mt-4 w-full"
-                  icon={saved ? BookmarkCheck : Bookmark}
-                  onClick={() => (saved ? progress.actions.unsaveMovie(movie.id) : progress.actions.saveMovie(movie.id))}
-                  variant={saved ? "secondary" : "primary"}
-                >
-                  {saved ? "Saved" : "Save"}
-                </ActionButton>
+                <ButtonLink href={`/movies/${pickedMovie.id}`} icon={RotateCw} variant="secondary">
+                  Open Movie
+                </ButtonLink>
               </div>
-            </article>
-          );
-        })}
-      </section>
+            </section>
+          ) : null}
 
-      <section className="rounded-md border border-ink/10 bg-paper/75 p-5">
-        <h2 className="text-2xl font-black text-ink">Watch later</h2>
-        {savedMovies.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {savedMovies.map((movie) => (
-              <Link
-                className="rounded-md bg-ink px-3 py-2 text-sm font-bold text-paper"
-                href={`/movies/${movie.id}`}
-                key={movie.id}
+          <section className="grid gap-4 lg:grid-cols-5">
+            {recommendations.map((movie, index) => {
+              const saved = progress.savedMovies.includes(movie.id);
+              return (
+                <article className="rounded-md border border-ink/10 bg-paper/100 p-3 shadow-soft" key={movie.id}>
+                  <Link href={`/movies/${movie.id}`}>
+                    <MoviePoster movie={movie} />
+                  </Link>
+                  <div className="mt-3">
+                    <p className="text-xs font-black uppercase tracking-[0.14em] text-teal">Pick {index + 1}</p>
+                    <h2 className="mt-1 text-lg font-black leading-tight text-ink">{movie.title}</h2>
+                    <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/60">{movie.description}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {movie.tags.slice(0, 3).map((tag) => (
+                        <span className="rounded-sm bg-frame px-2 py-1 text-[11px] font-bold text-ink/60" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <ActionButton
+                      className="mt-4 w-full"
+                      icon={saved ? BookmarkCheck : Bookmark}
+                      onClick={() => (saved ? progress.actions.unsaveMovie(movie.id) : progress.actions.saveMovie(movie.id))}
+                      variant={saved ? "secondary" : "primary"}
+                    >
+                      {saved ? "Saved" : "Save"}
+                    </ActionButton>
+                  </div>
+                </article>
+              );
+            })}
+          </section>
+
+          <section className="rounded-md border border-ink/10 bg-paper/75 p-5">
+            <h2 className="text-2xl font-black text-ink">Watch later</h2>
+            {savedMovies.length ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {savedMovies.map((movie) => (
+                  <Link
+                    className="rounded-md bg-ink px-3 py-2 text-sm font-bold text-paper"
+                    href={`/movies/${movie.id}`}
+                    key={movie.id}
+                  >
+                    {movie.title}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 text-sm leading-6 text-ink/60">Saved films will appear here.</p>
+            )}
+          </section>
+        </>
+      )}
+
+      <section>
+        <h2 className="mb-4 text-2xl font-black text-ink">Film Library</h2>
+        <div className="space-y-2">
+          {catalogMovies.map((movie) => (
+            <CatalogMovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CatalogMovieCard({ movie }: { movie: CatalogMovie }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="overflow-hidden rounded-md border border-ink/10 bg-paper/100 shadow-soft">
+      <button
+        className="flex w-full items-center gap-4 p-4 text-left transition hover:bg-frame"
+        onClick={() => setOpen((v) => !v)}
+        type="button"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="text-lg font-black leading-tight text-ink">{movie.title}</p>
+          <p className="mt-0.5 text-[11px] font-black uppercase tracking-[0.14em] text-ink/50">{movie.genre}</p>
+        </div>
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="text-base font-black text-ink">{movie.rating}</span>
+          <ChevronDown
+            className={`text-ink/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            size={18}
+          />
+        </div>
+      </button>
+
+      {open && (
+        <div className="border-t border-ink/10 px-4 pb-4 pt-3">
+          <div className="mb-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-ink/60">
+            <span><span className="font-black text-ink">Year</span> {movie.year}</span>
+            <span><span className="font-black text-ink">Director</span> {movie.director}</span>
+            <span><span className="font-black text-ink">Country</span> {movie.country}</span>
+          </div>
+          <p className="text-sm leading-6 text-ink/70">{movie.description}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {movie.tags.map((tag) => (
+              <span
+                className="rounded-full border border-gold/60 bg-gold/20 px-3 py-0.5 text-[11px] font-bold text-ink/70"
+                key={tag}
               >
-                {movie.title}
-              </Link>
+                {tag}
+              </span>
             ))}
           </div>
-        ) : (
-          <p className="mt-2 text-sm leading-6 text-ink/60">Saved films will appear here.</p>
-        )}
-      </section>
+        </div>
+      )}
     </div>
   );
 }
