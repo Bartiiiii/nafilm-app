@@ -44,9 +44,7 @@ export default function ProfilePage() {
           {progress.ticket ? (
             <div className="mt-4 space-y-3 text-sm font-semibold text-ink/50">
               <p>{progress.ticket.typeLabel}</p>
-              <p>
-                {progress.ticket.visitDate} at {progress.ticket.visitTime}
-              </p>
+              <p>Valid for {progress.ticket.validity}</p>
               <p className="break-all">{progress.ticket.id}</p>
               <ButtonLink href="/ticket/confirmation" icon={Ticket} variant="secondary">
                 Open Ticket

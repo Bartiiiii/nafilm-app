@@ -4,24 +4,28 @@ export const ticketTypes: TicketType[] = [
   {
     id: "adult",
     label: "Adult",
-    price: "220 CZK",
+    price: "240 CZK",
     points: 150,
   },
   {
-    id: "student",
-    label: "Student",
+    id: "student-senior",
+    label: "Student/Senior",
     price: "160 CZK",
-    points: 130,
+    points: 100,
+  },
+  {
+    id: "junior",
+    label: "Junior",
+    price: "140 CZK",
+    points: 90,
   },
   {
     id: "family",
-    label: "Family",
-    price: "520 CZK",
-    points: 260,
+    label: "Family (2+2)",
+    price: "620 CZK",
+    points: 300,
   },
 ];
-
-export const visitTimes = ["10:00", "11:30", "13:00", "14:30", "16:00", "17:30"];
 
 export const visitInfo = {
   address: "Mozarteum, Jungmannova 748/30, 110 00 Prague 1",

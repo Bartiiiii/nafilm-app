@@ -1,32 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarDays, CreditCard, Ticket } from "lucide-react";
+import { Ticket, WalletCards } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { SectionHeader } from "@/components/SectionHeader";
-import { ticketTypes, visitInfo, visitTimes } from "@/data/tickets";
+import { ticketTypes, visitInfo } from "@/data/tickets";
 import { useAppState } from "@/lib/useAppState";
 
 export default function TicketPage() {
   const router = useRouter();
   const progress = useAppState();
   const [typeId, setTypeId] = useState(ticketTypes[0].id);
-  const [visitDate, setVisitDate] = useState(() => new Date().toISOString().slice(0, 10));
-  const [visitTime, setVisitTime] = useState(visitTimes[2]);
   const selectedType = ticketTypes.find((type) => type.id === typeId) ?? ticketTypes[0];
-
-  const canSubmit = useMemo(() => Boolean(typeId && visitDate && visitTime), [typeId, visitDate, visitTime]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    if (!canSubmit) {
-      return;
-    }
-
-    progress.actions.createTicket(typeId, visitDate, visitTime);
+    progress.actions.createTicket(typeId);
     router.push("/ticket/confirmation");
   }
 
@@ -39,7 +30,7 @@ export default function TicketPage() {
           <div className="space-y-5">
             <fieldset>
               <legend className="text-sm font-black text-ink">Ticket type</legend>
-              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {ticketTypes.map((type) => (
                   <label
                     className={`cursor-pointer rounded-md border p-4 transition ${
@@ -66,42 +57,14 @@ export default function TicketPage() {
               </div>
             </fieldset>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-black text-ink">Visit date</span>
-                <input
-                  className="focus-ring mt-2 min-h-12 w-full rounded-md border border-ink/10 bg-paper px-3 text-sm font-semibold text-ink"
-                  min={new Date().toISOString().slice(0, 10)}
-                  onChange={(event) => setVisitDate(event.target.value)}
-                  type="date"
-                  value={visitDate}
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-black text-ink">Visit time</span>
-                <select
-                  className="focus-ring mt-2 min-h-12 w-full rounded-md border border-ink/10 bg-paper px-3 text-sm font-semibold text-ink"
-                  onChange={(event) => setVisitTime(event.target.value)}
-                  value={visitTime}
-                >
-                  {visitTimes.map((time) => (
-                    <option key={time}>{time}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div className="rounded-md bg-frame p-4">
-              <div className="flex items-center gap-3">
-                <CreditCard className="text-teal" size={20} />
-                <p className="text-sm font-bold text-ink">Mock checkout</p>
+            <div>
+              <p className="text-sm font-black text-ink">Validity</p>
+              <div className="mt-2 flex min-h-12 items-center rounded-md border border-ink/10 bg-frame px-3">
+                <span className="text-sm font-semibold text-ink">1 year</span>
               </div>
-              <p className="mt-2 text-sm leading-6 text-ink/60">
-                No payment is taken in this prototype. The confirmation creates a digital ticket and credits.
-              </p>
             </div>
 
-            <ActionButton className="w-full" disabled={!canSubmit} icon={Ticket} type="submit">
+            <ActionButton className="w-full" icon={Ticket} type="submit">
               Create Ticket
             </ActionButton>
           </div>
@@ -109,11 +72,11 @@ export default function TicketPage() {
 
         <aside className="space-y-4">
           <div className="rounded-md bg-ink p-5 text-paper shadow-soft">
-            <CalendarDays className="text-gold" size={24} />
+            <WalletCards className="text-gold" size={24} />
             <h2 className="mt-4 text-2xl font-black">{selectedType.label} Ticket</h2>
             <p className="mt-1 text-paper/50">{selectedType.price}</p>
             <p className="mt-4 text-sm leading-6 text-paper/50">
-              {visitDate} at {visitTime}. Earn {selectedType.points} Film Credits at checkout.
+              Valid for 1 year. Earn {selectedType.points} Film Credits at checkout.
             </p>
           </div>
 

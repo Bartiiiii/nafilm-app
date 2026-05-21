@@ -38,7 +38,7 @@ export default function TicketConfirmationPage() {
         <div className="rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft sm:p-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <TicketDetail label="Ticket" value={ticket.typeLabel} />
-            <TicketDetail label="Visit" value={`${ticket.visitDate} at ${ticket.visitTime}`} />
+            <TicketDetail label="Validity" value={ticket.validity} />
             <TicketDetail label="Address" value={visitInfo.address} />
             <TicketDetail label="Hours" value={visitInfo.openingHours} />
             <TicketDetail label="Language" value={visitInfo.languages} />

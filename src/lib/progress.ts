@@ -67,7 +67,7 @@ export function track(progress: UserProgress, event: string, meta?: AnalyticsEve
   };
 }
 
-export function createMockTicket(typeId: string, visitDate: string, visitTime: string): Ticket {
+export function createMockTicket(typeId: string): Ticket {
   const ticketType = ticketTypes.find((type) => type.id === typeId) ?? ticketTypes[0];
   const suffix = Math.random().toString(36).slice(2, 8).toUpperCase();
 
@@ -75,8 +75,7 @@ export function createMockTicket(typeId: string, visitDate: string, visitTime: s
     id: `NFLM-${Date.now().toString(36).toUpperCase()}-${suffix}`,
     typeId: ticketType.id,
     typeLabel: ticketType.label,
-    visitDate,
-    visitTime,
+    validity: "1 year",
     createdAt: new Date().toISOString(),
   };
 }

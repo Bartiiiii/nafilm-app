@@ -55,8 +55,7 @@ export type Ticket = {
   id: string;
   typeId: string;
   typeLabel: string;
-  visitDate: string;
-  visitTime: string;
+  validity: string;
   createdAt: string;
 };
 

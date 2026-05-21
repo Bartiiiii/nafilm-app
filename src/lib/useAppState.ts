@@ -17,7 +17,7 @@ import {
 } from "@/lib/progress";
 
 type AppActions = {
-  createTicket: (typeId: string, visitDate: string, visitTime: string) => void;
+  createTicket: (typeId: string) => void;
   startMission: () => void;
   completeLevel: (levelId: string, selectedOption: string) => void;
   saveMovie: (movieId: string) => void;
@@ -47,9 +47,9 @@ export function useAppState(): UserProgress & { isLoaded: boolean; actions: AppA
 
   const actions = useMemo<AppActions>(
     () => ({
-      createTicket(typeId, visitDate, visitTime) {
+      createTicket(typeId) {
         update((current) => {
-          const ticket = createMockTicket(typeId, visitDate, visitTime);
+          const ticket = createMockTicket(typeId);
           const ticketType = ticketTypes.find((type) => type.id === typeId) ?? ticketTypes[0];
           return track(
             {
