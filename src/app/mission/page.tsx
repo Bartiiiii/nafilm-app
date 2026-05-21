@@ -28,7 +28,7 @@ export default function MissionPage() {
               : "Step into the crew. Complete each room's mission, collect credits, and discover the magic of Czech cinema."}
           </p>
           <ButtonLink
-            href={completed ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`}
+            href={completed ? "/mission/result" : level1Done ? `/mission/level/${nextLevel?.id ?? levels[0].id}` : "/mission/introduction"}
             icon={completed || level1Done ? ArrowRight : Play}
           >
             {completed ? "View Result" : level1Done ? "Continue" : "Start mission"}
@@ -45,8 +45,7 @@ export default function MissionPage() {
             <Clapperboard className="text-gold" size={22} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-paper/50">Start here</p>
-            <h3 className="mt-0.5 text-lg font-black text-paper">Introduction</h3>
+            <h3 className="text-lg font-black text-paper">Introduction</h3>
             <p className="mt-0.5 text-sm leading-5 text-paper/50">The Birth of Film: The World and Pictures in Motion</p>
           </div>
         </div>
