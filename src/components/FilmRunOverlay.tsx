@@ -150,14 +150,7 @@ function render(canvas: HTMLCanvasElement | null, g: Game, status: string) {
     c.fillStyle = "#fbf7ef";
     c.font = "bold 36px Inter,sans-serif";
     c.textAlign = "center";
-    c.fillText(status === "over" ? "Game Over" : "Film Run", CW / 2, CH / 2 - 10);
-    c.font = "500 16px Inter,sans-serif";
-    c.fillStyle = "rgba(251,247,239,0.5)";
-    c.fillText(
-      status === "over" ? "Tap anywhere to run again" : "Tap anywhere to start",
-      CW / 2,
-      CH / 2 + 22
-    );
+    c.fillText(status === "over" ? "Game Over" : "Film Run", CW / 2, CH / 2 - 2);
   }
 }
 
@@ -349,8 +342,16 @@ export function FilmRunOverlay({ onClose }: { onClose: () => void }) {
         </div>
       </div>
 
+      {/* Push canvas toward vertical centre */}
+      <div className="flex-1" />
+
+      {/* Instruction line above canvas */}
+      <p className="pb-3 text-center text-xs font-black uppercase tracking-[0.18em] text-paper/40">
+        {status === "idle" ? "Tap to start" : status === "running" ? "Tap to jump" : "Tap to run again"}
+      </p>
+
       {/* Game canvas */}
-      <div className="px-3 pt-1">
+      <div className="px-3">
         <canvas
           aria-label="Film Run game canvas — tap to play"
           className="block aspect-[12/7] w-full rounded-md"
@@ -362,46 +363,14 @@ export function FilmRunOverlay({ onClose }: { onClose: () => void }) {
         />
       </div>
 
-      {/* Live stats */}
-      <div className="flex items-center justify-center gap-10 py-5 text-paper">
-        <div className="text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-paper/40">Reels</p>
-          <p className="text-3xl font-black">{snap.reels}</p>
-        </div>
-        <div className="h-8 w-px bg-paper/10" />
-        <div className="text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-paper/40">Distance</p>
-          <p className="text-3xl font-black">{snap.distance}</p>
-        </div>
+      {/* Reels counter */}
+      <div className="pt-5 text-center text-paper">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-paper/40">Reels</p>
+        <p className="text-3xl font-black">{snap.reels}</p>
       </div>
 
-      {/* Context area — fills remaining space */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 pb-10 text-center">
-        {status === "idle" && (
-          <>
-            <p className="text-sm leading-7 text-paper/40">
-              Dodge clapperboard obstacles and collect film reels. Each reel earns bonus credits.
-            </p>
-            <div className="rounded-full border border-paper/20 px-5 py-2">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-paper/50">Tap screen to start</p>
-            </div>
-          </>
-        )}
-        {status === "running" && (
-          <div className="rounded-full border border-paper/10 px-5 py-2">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-paper/30">Tap screen to jump</p>
-          </div>
-        )}
-        {status === "over" && (
-          <>
-            <p className="text-4xl font-black text-paper">{snap.score}</p>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-paper/40">Final score</p>
-            <div className="mt-2 rounded-full border border-paper/20 px-5 py-2">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-paper/50">Tap screen to run again</p>
-            </div>
-          </>
-        )}
-      </div>
+      {/* Bottom breathing room */}
+      <div className="flex-[1.4]" />
     </div>
   );
 }
