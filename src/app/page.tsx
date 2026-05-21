@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Clapperboard, Gift, Map, Ticket } from "lucide-react";
+import { ArrowRight, Clapperboard, Gift, Map, Star, Ticket } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
 import { levels } from "@/data/levels";
@@ -67,10 +67,17 @@ export default function HomePage() {
       </section>
 
       <section>
-        <div className="rounded-md border border-ink/10 bg-paper/50 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/50">Status</p>
-          <p className="mt-2 text-2xl font-black text-ink">{loyalty.level}</p>
-          <p className="mt-1 text-2xl font-black text-ink">{progress.points} credits</p>
+        <div className="flex items-center justify-between rounded-md border border-ink/10 bg-paper/50 p-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/50">Status</p>
+            <p className="mt-2 text-2xl font-black text-ink">{loyalty.level}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-5xl font-black text-ink">{progress.points}</span>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ember">
+              <Star className="text-paper" fill="currentColor" size={18} />
+            </div>
+          </div>
         </div>
       </section>
 
