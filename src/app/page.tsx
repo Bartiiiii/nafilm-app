@@ -3,7 +3,6 @@
 import { ArrowRight, Clapperboard, Gift, Map, Ticket } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
-import { StatTile } from "@/components/StatTile";
 import { levels } from "@/data/levels";
 import { getLoyaltyStatus, getNextLevel, isMissionComplete } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
@@ -67,10 +66,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-3">
-        <StatTile label="Film Credits" value={progress.points} />
-        <StatTile label="Badges" value={`${progress.badges.length}/${levels.length}`} />
-        <StatTile label="Loyalty" value={loyalty.level} />
+      <section>
+        <div className="rounded-md border border-ink/10 bg-paper/50 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/50">Status</p>
+          <p className="mt-2 text-2xl font-black text-ink">{loyalty.level}</p>
+          <p className="mt-1 text-2xl font-black text-ink">{progress.points} credits</p>
+        </div>
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
