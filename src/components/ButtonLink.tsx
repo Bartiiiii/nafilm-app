@@ -5,13 +5,14 @@ type ButtonLinkProps = {
   href: string;
   children: React.ReactNode;
   icon?: LucideIcon;
-  variant?: "primary" | "secondary" | "quiet";
+  variant?: "primary" | "secondary" | "quiet" | "gold";
 };
 
 const variants = {
   primary: "bg-ink text-paper hover:bg-ink/90",
   secondary: "bg-paper text-ink ring-1 ring-ink/10 hover:bg-frame",
   quiet: "bg-transparent text-ink hover:bg-ink/5",
+  gold: "bg-[#ecb500] text-white hover:bg-[#d4a300]",
 };
 
 export function ButtonLink({ href, children, icon: Icon, variant = "primary" }: ButtonLinkProps) {

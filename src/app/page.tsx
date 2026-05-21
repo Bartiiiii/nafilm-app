@@ -31,10 +31,10 @@ export default function HomePage() {
             for rewards, and enjoying movie recommendations made for you!
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={progress.ticket ? "/ticket/confirmation" : "/ticket"} icon={Ticket} variant="secondary">
+            <ButtonLink href="/ticket" icon={Ticket} variant="secondary">
               {progress.ticket ? "View Ticket" : "Buy Ticket"}
             </ButtonLink>
-            <ButtonLink href="/mission" icon={Map} variant="secondary">
+            <ButtonLink href="/mission" icon={Map} variant="gold">
               {progress.missionStarted ? "Continue Mission" : "Start Mission"}
             </ButtonLink>
           </div>
