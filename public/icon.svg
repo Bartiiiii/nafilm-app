@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NaFilM app icon">
+  <rect width="512" height="512" rx="96" fill="#12100f"/>
+  <circle cx="256" cy="256" r="148" fill="#fbf7ef"/>
+  <circle cx="256" cy="256" r="72" fill="#12100f"/>
+  <g fill="#ce5a35">
+    <circle cx="256" cy="112" r="30"/>
+    <circle cx="381" cy="184" r="30"/>
+    <circle cx="381" cy="328" r="30"/>
+    <circle cx="256" cy="400" r="30"/>
+    <circle cx="131" cy="328" r="30"/>
+    <circle cx="131" cy="184" r="30"/>
+  </g>
+</svg>
