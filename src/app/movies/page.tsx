@@ -19,7 +19,7 @@ export default function MoviesPage() {
       {hasQuiz ? (
         <EmptyState
           action="Check Your Recommendations"
-          body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
+          body="Answer a few questions about your taste and we'll hand-pick the best films just for you."
           href="/movies/quiz"
           title="Find your perfect film match"
           variant="gold"
@@ -27,7 +27,7 @@ export default function MoviesPage() {
       ) : (
         <EmptyState
           action="Take the Quiz"
-          body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
+          body="Answer a few questions about your taste and we'll hand-pick the best films just for you."
           href="/movies/quiz"
           title="Find your perfect film match"
         />
