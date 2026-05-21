@@ -7,6 +7,7 @@ import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
 import { SectionHeader } from "@/components/SectionHeader";
+import { catalogMovies } from "@/data/catalogMovies";
 import { getLoyaltyStatus, getMovie, getReward } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
 
@@ -28,8 +29,11 @@ export default function ProfilePage() {
     setEditing(false);
   }
   const savedMovies = progress.savedMovies.flatMap((id) => {
-    const movie = getMovie(id);
-    return movie ? [movie] : [];
+    const rec = getMovie(id);
+    if (rec) return [{ id: rec.id, title: rec.title, href: `/movies/${rec.id}` }];
+    const cat = catalogMovies.find((m) => m.id === id);
+    if (cat) return [{ id: cat.id, title: cat.title, href: `/movies` }];
+    return [];
   });
   const redeemedRewards = progress.redeemedRewards.flatMap((id) => {
     const reward = getReward(id);
@@ -107,7 +111,7 @@ export default function ProfilePage() {
         <ListPanel title="Saved movies">
           {savedMovies.length ? (
             savedMovies.map((movie) => (
-              <Link className="rounded-md bg-frame px-3 py-2 text-sm font-bold text-ink" href={`/movies/${movie.id}`} key={movie.id}>
+              <Link className="rounded-md bg-frame px-3 py-2 text-sm font-bold text-ink" href={movie.href} key={movie.id}>
                 {movie.title}
               </Link>
             ))

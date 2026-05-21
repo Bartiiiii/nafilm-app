@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, ChevronDown, RotateCw, Shuffle } from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronDown, RotateCw, Shuffle, Star } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { EmptyState } from "@/components/EmptyState";
@@ -121,7 +121,13 @@ export default function MoviesPage() {
         <h2 className="mb-4 text-2xl font-black text-ink">Film Library</h2>
         <div className="space-y-2">
           {catalogMovies.map((movie) => (
-            <CatalogMovieCard key={movie.id} movie={movie} />
+            <CatalogMovieCard
+              key={movie.id}
+              movie={movie}
+              onSave={() => progress.actions.saveMovie(movie.id)}
+              onUnsave={() => progress.actions.unsaveMovie(movie.id)}
+              saved={progress.savedMovies.includes(movie.id)}
+            />
           ))}
         </div>
       </section>
@@ -129,7 +135,17 @@ export default function MoviesPage() {
   );
 }
 
-function CatalogMovieCard({ movie }: { movie: CatalogMovie }) {
+function CatalogMovieCard({
+  movie,
+  saved,
+  onSave,
+  onUnsave,
+}: {
+  movie: CatalogMovie;
+  saved: boolean;
+  onSave: () => void;
+  onUnsave: () => void;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -154,12 +170,28 @@ function CatalogMovieCard({ movie }: { movie: CatalogMovie }) {
 
       {open && (
         <div className="border-t border-ink/10 px-4 pb-4 pt-3">
-          <div className="mb-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-ink/60">
-            <span><span className="font-black text-ink">Year</span> {movie.year}</span>
-            <span><span className="font-black text-ink">Director</span> {movie.director}</span>
-            <span><span className="font-black text-ink">Country</span> {movie.country}</span>
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-1 text-sm">
+              <p className="text-ink/70"><span className="font-black text-ink">Year</span> {movie.year}</p>
+              <p className="text-ink/70"><span className="font-black text-ink">Country</span> {movie.country}</p>
+              <p className="text-ink/70"><span className="font-black text-ink">Director</span> {movie.director}</p>
+            </div>
+            <button
+              aria-label={saved ? "Unsave movie" : "Save movie"}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition ${
+                saved ? "bg-gold/20" : "bg-ink/8 hover:bg-ink/10"
+              }`}
+              onClick={(e) => { e.stopPropagation(); saved ? onUnsave() : onSave(); }}
+              type="button"
+            >
+              <Star
+                className={saved ? "text-gold" : "text-ink/30"}
+                fill={saved ? "currentColor" : "none"}
+                size={20}
+              />
+            </button>
           </div>
-          <p className="text-sm leading-6 text-ink/70">{movie.description}</p>
+          <p className="mt-3 text-sm leading-6 text-ink/70">{movie.description}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {movie.tags.map((tag) => (
               <span
