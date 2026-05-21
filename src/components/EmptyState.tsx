@@ -14,7 +14,7 @@ export function EmptyState({
   variant?: "primary" | "secondary" | "gold";
 }) {
   return (
-    <div className="rounded-md border border-ink/10 bg-paper/75 px-4 py-6 text-center shadow-soft">
+    <div className="rounded-md border border-ink/10 bg-paper/75 p-6 text-center shadow-soft">
       <h2 className="text-2xl font-black text-ink">{title}</h2>
       <p className="mt-2 text-sm leading-6 text-ink/50">{body}</p>
       <div className="mt-5">
