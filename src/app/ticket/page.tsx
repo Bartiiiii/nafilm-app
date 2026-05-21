@@ -105,7 +105,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="font-black text-ink/50">{label}</dt>
-      <dd className="mt-1 font-semibold leading-5 text-ink">{value}</dd>
+      <dd className="mt-1 whitespace-pre-line font-semibold leading-5 text-ink">{value}</dd>
     </div>
   );
 }

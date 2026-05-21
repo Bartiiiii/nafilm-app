@@ -72,7 +72,7 @@ function TicketDetail({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md bg-frame p-4">
       <p className="text-xs font-black uppercase tracking-[0.14em] text-ink/50">{label}</p>
-      <p className="mt-2 text-sm font-bold leading-5 text-ink">{value}</p>
+      <p className="mt-2 whitespace-pre-line text-sm font-bold leading-5 text-ink">{value}</p>
     </div>
   );
 }

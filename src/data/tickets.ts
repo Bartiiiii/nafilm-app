@@ -29,6 +29,6 @@ export const ticketTypes: TicketType[] = [
 
 export const visitInfo = {
   address: "Mozarteum, Jungmannova 748/30, 110 00 Prague 1",
-  openingHours: "Open daily 13:00-19:00",
+  openingHours: "Tue–Fri | 13:00–19:00\nSat–Sun | 10:00–19:00",
   languages: "Czech and English friendly",
 };

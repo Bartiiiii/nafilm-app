@@ -43,7 +43,7 @@ export default function HomePage() {
         <div className="rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-teal">Now playing</p>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-teal">Current Mission</p>
               <h2 className="mt-2 text-2xl font-black text-ink">
                 {progress.finalIdentity ?? (nextLevel ? nextLevel.title : "Your premiere awaits")}
               </h2>
