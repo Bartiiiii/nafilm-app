@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronRight, RotateCcw, Sparkles, Star } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
@@ -74,10 +74,18 @@ const QUESTIONS: {
 
 export default function QuizPage() {
   const progress = useAppState();
-  const alreadyDone = progress.quizAnswers !== null;
 
-  const [step, setStep] = useState<number>(alreadyDone ? 6 : 0);
-  const [answers, setAnswers] = useState<Partial<QuizAnswers>>(progress.quizAnswers ?? {});
+  const [step, setStep] = useState<number>(0);
+  const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
+
+  useEffect(() => {
+    if (progress.isLoaded) {
+      if (progress.quizAnswers !== null) {
+        setAnswers(progress.quizAnswers);
+        setStep(6);
+      }
+    }
+  }, [progress.isLoaded]);
 
   function pickAnswer(key: keyof QuizAnswers, value: string) {
     const next = { ...answers, [key]: value } as Partial<QuizAnswers>;
