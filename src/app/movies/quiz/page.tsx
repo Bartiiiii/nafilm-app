@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Bookmark, BookmarkCheck, ChevronRight, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowLeft, ChevronRight, RotateCcw, Sparkles, Star } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -287,16 +287,16 @@ function ResultsScreen({
                   <button
                     aria-label={saved ? "Remove from watchlist" : "Save to watchlist"}
                     className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition ${
-                      saved ? "bg-gold/20" : "bg-ink/8 hover:bg-ink/10"
+                      saved ? "bg-gold/20" : "bg-ink/10 hover:bg-ink/20"
                     }`}
                     onClick={() => (saved ? onUnsave(movie.id) : onSave(movie.id))}
                     type="button"
                   >
-                    {saved ? (
-                      <BookmarkCheck className="text-gold" size={18} />
-                    ) : (
-                      <Bookmark className="text-ink/40" size={18} />
-                    )}
+                    <Star
+                      className={saved ? "text-gold" : "text-ink/30"}
+                      fill={saved ? "currentColor" : "none"}
+                      size={20}
+                    />
                   </button>
                 </div>
 
