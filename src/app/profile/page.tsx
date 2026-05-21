@@ -1,19 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { RotateCcw, Ticket } from "lucide-react";
+import { RotateCcw, Ticket, UserRound } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
-import { BadgeGrid } from "@/components/BadgeGrid";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { StatTile } from "@/components/StatTile";
-import { rewards } from "@/data/rewards";
-import { getMovie, getReward } from "@/lib/progress";
+import { getLoyaltyStatus, getMovie, getReward } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
 
 export default function ProfilePage() {
   const progress = useAppState();
+  const loyalty = getLoyaltyStatus(progress);
   const savedMovies = progress.savedMovies.flatMap((id) => {
     const movie = getMovie(id);
     return movie ? [movie] : [];
@@ -25,17 +23,16 @@ export default function ProfilePage() {
 
   return (
     <div className="content-wrap space-y-7">
-      <SectionHeader eyebrow="Profile" title="Guest progress.">
-        <ActionButton icon={RotateCcw} onClick={progress.actions.resetPrototype} variant="secondary">
-          Reset
-        </ActionButton>
-      </SectionHeader>
+      <SectionHeader eyebrow="Profile" title="Guest progress." />
 
-      <section className="grid gap-4 sm:grid-cols-4">
-        <StatTile label="Credits" value={progress.points} />
-        <StatTile label="Badges" value={progress.badges.length} />
-        <StatTile label="Saved" value={progress.savedMovies.length} />
-        <StatTile label="Rewards" value={`${progress.redeemedRewards.length}/${rewards.length}`} />
+      <section className="flex items-center gap-5 rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-ink">
+          <UserRound className="text-paper" size={32} />
+        </div>
+        <div>
+          <p className="text-2xl font-black text-ink">Guest</p>
+          <p className="mt-1 text-sm font-semibold text-ink/50">{loyalty.level}</p>
+        </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
@@ -71,11 +68,6 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-4 text-2xl font-black text-ink">Badges</h2>
-        <BadgeGrid earned={progress.badges} />
-      </section>
-
       <section className="grid gap-4 lg:grid-cols-2">
         <ListPanel title="Saved movies">
           {savedMovies.length ? (
@@ -100,6 +92,12 @@ export default function ProfilePage() {
             <p className="text-sm leading-6 text-ink/60">Rewards you redeem will appear here.</p>
           )}
         </ListPanel>
+      </section>
+
+      <section>
+        <ActionButton icon={RotateCcw} onClick={progress.actions.resetPrototype} variant="secondary">
+          Reset prototype
+        </ActionButton>
       </section>
     </div>
   );
