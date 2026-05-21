@@ -17,6 +17,7 @@ import {
 } from "@/lib/progress";
 
 type AppActions = {
+  setUserName: (name: string) => void;
   createTicket: (typeId: string) => void;
   startMission: () => void;
   completeLevel: (levelId: string, selectedOption: string) => void;
@@ -47,6 +48,9 @@ export function useAppState(): UserProgress & { isLoaded: boolean; actions: AppA
 
   const actions = useMemo<AppActions>(
     () => ({
+      setUserName(name) {
+        update((current) => ({ ...current, userName: name.trim() || current.userName }));
+      },
       createTicket(typeId) {
         update((current) => {
           const ticket = createMockTicket(typeId);

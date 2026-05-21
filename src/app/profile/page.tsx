@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { RotateCcw, Ticket, UserRound } from "lucide-react";
+import { useRef, useState } from "react";
+import { Pencil, RotateCcw, Ticket, UserRound } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
@@ -12,6 +13,20 @@ import { useAppState } from "@/lib/useAppState";
 export default function ProfilePage() {
   const progress = useAppState();
   const loyalty = getLoyaltyStatus(progress);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function startEdit() {
+    setDraft(progress.userName);
+    setEditing(true);
+    setTimeout(() => inputRef.current?.select(), 0);
+  }
+
+  function commitEdit() {
+    progress.actions.setUserName(draft);
+    setEditing(false);
+  }
   const savedMovies = progress.savedMovies.flatMap((id) => {
     const movie = getMovie(id);
     return movie ? [movie] : [];
@@ -29,10 +44,30 @@ export default function ProfilePage() {
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-ink">
           <UserRound className="text-paper" size={32} />
         </div>
-        <div>
-          <p className="text-2xl font-black text-ink">Guest</p>
+        <div className="min-w-0 flex-1">
+          {editing ? (
+            <input
+              autoFocus
+              className="w-full border-b-2 border-ember bg-transparent text-2xl font-black text-ink outline-none"
+              onBlur={commitEdit}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") commitEdit(); if (e.key === "Escape") setEditing(false); }}
+              ref={inputRef}
+              value={draft}
+            />
+          ) : (
+            <p className="text-2xl font-black text-ink">{progress.userName}</p>
+          )}
           <p className="mt-1 text-sm font-semibold text-ink/50">{loyalty.level}</p>
         </div>
+        <button
+          aria-label="Edit name"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-frame transition hover:bg-ink/10"
+          onClick={startEdit}
+          type="button"
+        >
+          <Pencil size={14} />
+        </button>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">

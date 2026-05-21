@@ -81,6 +81,7 @@ export type MiniGameState = {
 };
 
 export type UserProgress = {
+  userName: string;
   ticket: Ticket | null;
   missionStarted: boolean;
   completedLevels: CompletedLevel[];
