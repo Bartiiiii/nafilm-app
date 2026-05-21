@@ -9,20 +9,24 @@ import { EmptyState } from "@/components/EmptyState";
 import { MoviePoster } from "@/components/MoviePoster";
 import { SectionHeader } from "@/components/SectionHeader";
 import { catalogMovies } from "@/data/catalogMovies";
-import { getMovie, getRecommendations, isMissionComplete } from "@/lib/progress";
-import type { CatalogMovie } from "@/types";
+import { getQuizMovie } from "@/data/movieRecommendations";
+import { getMovie } from "@/lib/progress";
+import type { CatalogMovie, Movie } from "@/types";
 import { useAppState } from "@/lib/useAppState";
 
 export default function MoviesPage() {
   const progress = useAppState();
   const [pickedMovieId, setPickedMovieId] = useState<string | null>(null);
-  const complete = isMissionComplete(progress);
-  const recommendations = getRecommendations(progress);
+  const hasQuiz = progress.quizAnswers !== null;
+  const recommendations: Movie[] = progress.quizRecommendedIds.flatMap((id) => {
+    const m = getQuizMovie(id) ?? getMovie(id);
+    return m ? [m] : [];
+  });
   const savedMovies = progress.savedMovies.flatMap((id) => {
-    const movie = getMovie(id);
+    const movie = getQuizMovie(id) ?? getMovie(id);
     return movie ? [movie] : [];
   });
-  const pickedMovie = pickedMovieId ? getMovie(pickedMovieId) : null;
+  const pickedMovie = pickedMovieId ? (getQuizMovie(pickedMovieId) ?? getMovie(pickedMovieId)) : null;
 
   function spinReel() {
     const randomMovie = recommendations[Math.floor(Math.random() * recommendations.length)];
@@ -33,7 +37,7 @@ export default function MoviesPage() {
     <div className="content-wrap space-y-7">
       <SectionHeader eyebrow="Movies" title="Our recommendations." />
 
-      {!complete ? (
+      {!hasQuiz ? (
         <EmptyState
           action="Take the Quiz"
           body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
@@ -43,9 +47,17 @@ export default function MoviesPage() {
       ) : (
         <>
           <SectionHeader eyebrow="Movies" title="Top 5 movies you should watch.">
-            <ActionButton icon={Shuffle} onClick={spinReel}>
-              Spin the Reel
-            </ActionButton>
+            <div className="flex gap-2">
+              <ActionButton icon={Shuffle} onClick={spinReel}>
+                Spin the Reel
+              </ActionButton>
+              <Link
+                className="flex items-center gap-1.5 rounded-full border border-ink/20 px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-ink/50 transition hover:border-ink/40 hover:text-ink/70"
+                href="/movies/quiz"
+              >
+                Retake quiz
+              </Link>
+            </div>
           </SectionHeader>
 
           {pickedMovie ? (

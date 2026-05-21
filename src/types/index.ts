@@ -44,6 +44,14 @@ export type Reward = {
   active: boolean;
 };
 
+export type QuizAnswers = {
+  q1: string;
+  q2: string;
+  q3: string;
+  q4: string;
+  q5: string;
+};
+
 export type CatalogMovie = {
   id: string;
   title: string;
@@ -94,6 +102,8 @@ export type MiniGameState = {
 
 export type UserProgress = {
   userName: string;
+  quizAnswers: QuizAnswers | null;
+  quizRecommendedIds: string[];
   ticket: Ticket | null;
   missionStarted: boolean;
   completedLevels: CompletedLevel[];

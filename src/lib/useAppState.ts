@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ticketTypes } from "@/data/tickets";
 import { defaultProgress } from "@/data/userProgress";
-import type { UserProgress } from "@/types";
+import type { QuizAnswers, UserProgress } from "@/types";
 import {
   awardMiniGameCredits as applyMiniGameCredits,
   completeLevel,
@@ -18,6 +18,8 @@ import {
 
 type AppActions = {
   setUserName: (name: string) => void;
+  saveQuizResults: (answers: QuizAnswers, recommendedIds: string[]) => void;
+  clearQuiz: () => void;
   createTicket: (typeId: string) => void;
   startMission: () => void;
   completeLevel: (levelId: string, selectedOption: string) => void;
@@ -50,6 +52,12 @@ export function useAppState(): UserProgress & { isLoaded: boolean; actions: AppA
     () => ({
       setUserName(name) {
         update((current) => ({ ...current, userName: name.trim() || current.userName }));
+      },
+      saveQuizResults(answers, recommendedIds) {
+        update((current) => ({ ...current, quizAnswers: answers, quizRecommendedIds: recommendedIds }));
+      },
+      clearQuiz() {
+        update((current) => ({ ...current, quizAnswers: null, quizRecommendedIds: [] }));
       },
       createTicket(typeId) {
         update((current) => {

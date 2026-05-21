@@ -2,6 +2,8 @@ import type { UserProgress } from "@/types";
 
 export const defaultProgress: UserProgress = {
   userName: "Cineaste",
+  quizAnswers: null,
+  quizRecommendedIds: [],
   ticket: null,
   missionStarted: false,
   completedLevels: [],
