@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { ArrowRight, Check, LockKeyhole, Map, Play } from "lucide-react";
-import { ActionButton } from "@/components/ActionButton";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
 import { SectionHeader } from "@/components/SectionHeader";
-import { StatTile } from "@/components/StatTile";
 import { levels } from "@/data/levels";
 import { getBadge, getNextLevel, isMissionComplete } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
@@ -16,24 +14,11 @@ export default function MissionPage() {
   const completedIds = progress.completedLevels.map((level) => level.levelId);
   const nextLevel = getNextLevel(progress);
   const completed = isMissionComplete(progress);
+  const level1Done = completedIds.length > 0;
 
   return (
     <div className="content-wrap space-y-7">
-      <SectionHeader eyebrow="Mission" title="The Filmmaker's Journey.">
-        {progress.missionStarted ? null : (
-          <ActionButton icon={Play} onClick={() => progress.actions.startMission()}>
-            Start Mission
-          </ActionButton>
-        )}
-      </SectionHeader>
-
-      <section className="grid gap-4 sm:grid-cols-3">
-        <StatTile label="Role" value={progress.finalIdentity ?? (progress.missionStarted ? "Trainee" : "Visitor")} />
-        <StatTile label="Film Credits" value={progress.points} />
-        <StatTile label="Rooms" value={`${completedIds.length}/${levels.length}`} />
-      </section>
-
-      <ProgressReel completed={completedIds} />
+      <SectionHeader eyebrow="Mission" title="The Filmmaker's Journey." />
 
       <section className="rounded-md border border-ink/10 bg-paper/75 p-5 shadow-soft">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -47,11 +32,16 @@ export default function MissionPage() {
                 : "Scan the room marker in the prototype, answer one quick prompt, and move on."}
             </p>
           </div>
-          <ButtonLink href={completed ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`} icon={ArrowRight}>
-            {completed ? "View Result" : "Continue"}
+          <ButtonLink
+            href={completed ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`}
+            icon={completed || level1Done ? ArrowRight : Play}
+          >
+            {completed ? "View Result" : level1Done ? "Continue" : "Start mission"}
           </ButtonLink>
         </div>
       </section>
+
+      <ProgressReel completed={completedIds} />
 
       <section className="grid gap-3">
         {levels.map((level) => {
