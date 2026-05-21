@@ -1,4 +1,11 @@
-export type InteractionType = "choice" | "mood" | "sequence" | "observation";
+export type SequenceItem = { id: string; label: string; emoji: string };
+export type MatchPair = { left: string; right: string };
+export type QuizQuestion = { text: string; options: string[]; correct: number };
+
+export type GameData =
+  | { type: "sequence"; items: SequenceItem[]; correctOrder: string[] }
+  | { type: "match"; pairs: MatchPair[] }
+  | { type: "quiz"; questions: QuizQuestion[]; passMark?: number };
 
 export type Level = {
   id: string;
@@ -6,11 +13,8 @@ export type Level = {
   title: string;
   room: string;
   description: string;
-  physicalTask: string;
-  interactionType: InteractionType;
-  question: string;
-  options: string[];
-  correctOrPreferredOption: string;
+  game: GameData;
+  curioFacts: string[];
   points: number;
   badgeId: string;
   recommendationSignals: string[];

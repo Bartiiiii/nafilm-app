@@ -1,14 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { ArrowRight, BadgeCheck, Check, Radio, RotateCcw, ScanLine } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, ChevronDown } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
-import { ButtonLink } from "@/components/ButtonLink";
-import { SectionHeader } from "@/components/SectionHeader";
+import { MiniGame } from "@/components/MiniGame";
 import { levels } from "@/data/levels";
-import { getBadge, getLevel, getNextLevel, isMissionComplete } from "@/lib/progress";
+import { getBadge, getLevel, isMissionComplete } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
 
 export default function LevelPage() {
@@ -16,9 +14,10 @@ export default function LevelPage() {
   const params = useParams<{ id: string }>();
   const progress = useAppState();
   const level = getLevel(params.id);
-  const [scanned, setScanned] = useState(false);
-  const [selected, setSelected] = useState("");
+
+  const [gameComplete, setGameComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
+  const [curioOpen, setCurioOpen] = useState(false);
 
   const completedLevel = useMemo(
     () => progress.completedLevels.find((entry) => entry.levelId === params.id),
@@ -29,163 +28,129 @@ export default function LevelPage() {
     return (
       <div className="content-wrap rounded-md border border-ink/10 bg-paper/100 p-6 shadow-soft">
         <h1 className="text-2xl font-black text-ink">Room not found</h1>
-        <p className="mt-2 text-sm leading-6 text-ink/60">This mission room is not in the current MVP route set.</p>
-        <div className="mt-5">
-          <ButtonLink href="/mission" variant="secondary">
-            Mission Map
-          </ButtonLink>
-        </div>
+        <p className="mt-2 text-sm leading-6 text-ink/60">This room is not in the current route.</p>
       </div>
     );
   }
 
   const badge = getBadge(level.badgeId);
-  const nextLevel = getNextLevel(progress);
-  const followingLevel = levels.find((candidate) => candidate.order === level.order + 1);
-  const canSubmit = Boolean(selected);
+  const followingLevel = levels.find((l) => l.order === level.order + 1);
+  const alreadyDone = Boolean(completedLevel);
 
-  function handleComplete() {
-    if (!level || !canSubmit) {
-      return;
-    }
-
-    progress.actions.completeLevel(level.id, selected);
-    setShowReward(true);
+  function handleGameComplete() {
+    if (alreadyDone) return;
+    setGameComplete(true);
+    progress.actions.completeLevel(level!.id, "completed");
+    setTimeout(() => setShowReward(true), 300);
   }
 
-  function handlePrimaryCta() {
-    if (!level) {
-      router.push("/mission");
-      return;
-    }
-
-    const alreadyFinished = progress.completedLevels.length + (completedLevel ? 0 : 1) >= levels.length;
-    router.push(alreadyFinished ? "/mission/result" : `/mission/level/${followingLevel?.id ?? levels[0].id}`);
+  function handleContinue() {
+    const allDone =
+      progress.completedLevels.length + (completedLevel ? 0 : 1) >= levels.length;
+    router.push(allDone ? "/mission/result" : `/mission/level/${followingLevel?.id ?? levels[0].id}`);
   }
 
   return (
-    <div className="content-wrap space-y-7">
-      <SectionHeader eyebrow={`Level ${level.order}`} title={level.title} />
-
-      <section className="grid gap-5 lg:grid-cols-[1fr_0.75fr]">
-        <div className="rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft sm:p-6">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-teal">{level.room}</p>
-          <h2 className="mt-3 text-2xl font-black text-ink">Room mission</h2>
-          <p className="mt-3 text-base leading-7 text-ink/50">{level.description}</p>
-
-          <div className="mt-5 rounded-md bg-frame p-4">
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-ink/50">Physical task</p>
-            <p className="mt-2 text-sm font-semibold leading-6 text-ink">{level.physicalTask}</p>
-          </div>
-
-          <div className="mt-5">
-            {completedLevel ? (
-              <div className="rounded-md border border-gold/50 bg-gold/20 p-4">
-                <div className="flex items-center gap-3">
-                  <BadgeCheck className="text-gold" size={23} />
-                  <p className="font-black text-ink">{badge?.title ?? "Badge earned"}</p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-ink/60">
-                  You completed this room with "{completedLevel.selectedOption}".
-                </p>
-              </div>
-            ) : showReward ? (
-              <RewardPanel badgeTitle={badge?.title ?? "Badge"} points={level.points} onContinue={handlePrimaryCta} />
-            ) : scanned ? (
-              <InteractionPanel
-                canSubmit={canSubmit}
-                level={level}
-                onComplete={handleComplete}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            ) : (
-              <ActionButton className="w-full" icon={ScanLine} onClick={() => setScanned(true)}>
-                Scan QR / NFC
-              </ActionButton>
-            )}
-          </div>
+    <div className="content-wrap space-y-6">
+      {/* Back button */}
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-teal">
+            Room {level.order} of {levels.length}
+          </p>
+          <h1 className="mt-1 text-3xl font-black text-ink">{level.title}</h1>
+          <p className="mt-0.5 text-sm font-semibold text-ink/50">{level.room}</p>
         </div>
+        <button
+          aria-label="Back to mission"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink/20 bg-paper transition hover:border-ink/40 hover:bg-frame"
+          onClick={() => router.push("/mission")}
+          type="button"
+        >
+          <ArrowLeft size={16} />
+        </button>
+      </div>
 
-        <aside className="rounded-md bg-ink p-5 text-paper shadow-soft">
-          <Radio className="text-gold" size={28} />
-          <h2 className="mt-4 text-2xl font-black">{badge?.title ?? "Room badge"}</h2>
-          <p className="mt-2 text-sm leading-6 text-paper/50">{badge?.description}</p>
-          <div className="mt-5 rounded-md bg-paper/10 p-4">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-paper/50">Reward</p>
-            <p className="mt-2 text-3xl font-black text-gold">+{level.points}</p>
-            <p className="text-sm font-semibold text-paper/60">Film Credits</p>
+      {/* Description */}
+      <section className="rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft">
+        <p className="text-sm leading-7 text-ink/70">{level.description}</p>
+      </section>
+
+      {/* Minigame or already-done state */}
+      <section className="rounded-md border border-ink/10 bg-paper/100 p-5 shadow-soft">
+        {alreadyDone || showReward ? (
+          <RewardPanel
+            badge={badge?.title ?? "Badge"}
+            onContinue={handleContinue}
+            points={level.points}
+            showContinue={alreadyDone || showReward}
+          />
+        ) : (
+          <MiniGame game={level.game} onComplete={handleGameComplete} />
+        )}
+      </section>
+
+      {/* For the Curious */}
+      <section className="rounded-md border border-ink/10 bg-paper/75 shadow-soft">
+        <button
+          className="flex w-full items-center justify-between p-5 text-left transition hover:bg-frame"
+          onClick={() => setCurioOpen((v) => !v)}
+          type="button"
+        >
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-ember">
+              For the Curious
+            </p>
+            <p className="mt-0.5 text-base font-black text-ink">Dig deeper into this room</p>
           </div>
-          <div className="mt-5 flex flex-col gap-3">
-            <ButtonLink href="/mission" icon={RotateCcw} variant="secondary">
-              Mission Map
-            </ButtonLink>
-            {completedLevel ? (
-              <ButtonLink href={isMissionComplete(progress) ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`} icon={ArrowRight} variant="secondary">
-                {isMissionComplete(progress) ? "Result" : "Next Room"}
-              </ButtonLink>
-            ) : null}
+          <ChevronDown
+            className={`shrink-0 text-ink/40 transition-transform duration-200 ${curioOpen ? "rotate-180" : ""}`}
+            size={20}
+          />
+        </button>
+
+        {curioOpen && (
+          <div className="border-t border-ink/10 px-5 pb-5 pt-4">
+            <ul className="space-y-4">
+              {level.curioFacts.map((fact, i) => (
+                <li className="flex gap-3 text-sm leading-6 text-ink/70" key={i}>
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ember" />
+                  {fact}
+                </li>
+              ))}
+            </ul>
           </div>
-        </aside>
+        )}
       </section>
     </div>
   );
 }
 
-function InteractionPanel({
-  canSubmit,
-  level,
-  onComplete,
-  selected,
-  setSelected,
+function RewardPanel({
+  badge,
+  points,
+  onContinue,
+  showContinue,
 }: {
-  canSubmit: boolean;
-  level: NonNullable<ReturnType<typeof getLevel>>;
-  onComplete: () => void;
-  selected: string;
-  setSelected: (value: string) => void;
+  badge: string;
+  points: number;
+  onContinue: () => void;
+  showContinue: boolean;
 }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-black text-ink">{level.question}</h3>
-      <div className="grid gap-2 sm:grid-cols-2">
-        {level.options.map((option) => (
-          <button
-            className={`focus-ring min-h-14 rounded-md border px-4 text-left text-sm font-bold transition ${
-              selected === option ? "border-ink bg-ink text-paper" : "border-ink/10 bg-paper hover:bg-frame"
-            }`}
-            key={option}
-            onClick={() => setSelected(option)}
-            type="button"
-          >
-            {option}
-          </button>
-        ))}
+      <div className="flex items-center gap-3">
+        <BadgeCheck className="shrink-0 text-gold" size={28} />
+        <div>
+          <p className="text-lg font-black text-ink">{badge}</p>
+          <p className="text-sm font-semibold text-ink/50">+{points} Film Credits earned</p>
+        </div>
       </div>
-      <ActionButton className="w-full" disabled={!canSubmit} icon={Check} onClick={onComplete}>
-        Claim Badge
-      </ActionButton>
-    </div>
-  );
-}
-
-function RewardPanel({
-  badgeTitle,
-  onContinue,
-  points,
-}: {
-  badgeTitle: string;
-  onContinue: () => void;
-  points: number;
-}) {
-  return (
-    <div className="rounded-md border border-gold/50 bg-gold/20 p-5">
-      <BadgeCheck className="text-gold" size={28} />
-      <h3 className="mt-3 text-2xl font-black text-ink">{badgeTitle}</h3>
-      <p className="mt-1 text-sm font-bold text-ink/50">+{points} Film Credits</p>
-      <ActionButton className="mt-5 w-full" icon={ArrowRight} onClick={onContinue}>
-        Continue
-      </ActionButton>
+      {showContinue && (
+        <ActionButton className="w-full" icon={ArrowRight} onClick={onContinue}>
+          Continue to next room
+        </ActionButton>
+      )}
     </div>
   );
 }

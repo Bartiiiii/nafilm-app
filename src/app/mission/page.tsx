@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, LockKeyhole, Map, Play } from "lucide-react";
+import { ArrowRight, Check, Clapperboard, LockKeyhole, Play } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { ProgressReel } from "@/components/ProgressReel";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -39,6 +39,18 @@ export default function MissionPage() {
       <ProgressReel completed={completedIds} />
 
       <section className="grid gap-3">
+        {/* Introduction block */}
+        <div className="flex items-center gap-4 rounded-md border border-ink/10 bg-ink p-4 shadow-soft">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-paper/10">
+            <Clapperboard className="text-gold" size={22} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-paper/50">Start here</p>
+            <h3 className="mt-0.5 text-lg font-black text-paper">Introduction</h3>
+            <p className="mt-0.5 text-sm leading-5 text-paper/50">The Birth of Film: The World and Pictures in Motion</p>
+          </div>
+        </div>
+
         {levels.map((level) => {
           const completedLevel = progress.completedLevels.find((entry) => entry.levelId === level.id);
           const isDone = Boolean(completedLevel);
@@ -71,8 +83,8 @@ export default function MissionPage() {
                 <p className="mt-1 text-sm leading-6 text-ink/60">{badge?.title ?? "Badge"} · +{level.points} credits</p>
               </div>
               <div className="flex items-center gap-2 text-sm font-black text-ink/50">
-                {isLocked ? <LockKeyhole size={18} /> : <Map size={18} />}
-                <span>{isDone ? "Done" : isCurrent ? "Next" : "Open"}</span>
+                {isLocked ? <LockKeyhole size={18} /> : null}
+                <span>{isDone ? "Done" : isCurrent ? "Next" : isLocked ? "Locked" : "Open"}</span>
               </div>
             </Link>
           );
