@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { BadgeCheck, Gift, LockKeyhole, Star, User } from "lucide-react";
 import { ActionButton } from "@/components/ActionButton";
-import { BadgeGrid } from "@/components/BadgeGrid";
 import { SectionHeader } from "@/components/SectionHeader";
 import { rewards } from "@/data/rewards";
-import { canRedeem, getLoyaltyStatus, getMovie } from "@/lib/progress";
+import { canRedeem, getLoyaltyStatus } from "@/lib/progress";
 import { useAppState } from "@/lib/useAppState";
 
 const nextRankMap: Record<string, string> = {
@@ -23,10 +21,6 @@ export default function RewardsPage() {
   const progress = useAppState();
   const loyalty = getLoyaltyStatus(progress);
   const loyaltyPercent = loyalty.target ? Math.min(100, Math.round((loyalty.current / loyalty.target) * 100)) : 0;
-  const savedMovies = progress.savedMovies.flatMap((id) => {
-    const movie = getMovie(id);
-    return movie ? [movie] : [];
-  });
   const nextRank = nextRankMap[loyalty.level] ?? "Top rank reached";
 
   return (
@@ -105,25 +99,6 @@ export default function RewardsPage() {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-4 text-2xl font-black text-ink">Earned badges</h2>
-        <BadgeGrid earned={progress.badges} />
-      </section>
-
-      <section className="rounded-md border border-ink/10 bg-paper/75 p-5">
-        <h2 className="text-2xl font-black text-ink">Saved movies</h2>
-        {savedMovies.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {savedMovies.map((movie) => (
-              <Link className="rounded-md bg-ink px-3 py-2 text-sm font-bold text-paper" href={`/movies/${movie.id}`} key={movie.id}>
-                {movie.title}
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="mt-2 text-sm leading-6 text-ink/60">Movies you save from the Top 5 list will appear here.</p>
-        )}
-      </section>
     </div>
   );
 }
