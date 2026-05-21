@@ -22,16 +22,11 @@ export default function MissionPage() {
 
       <section className="rounded-md border border-ink/10 bg-paper/75 p-5 shadow-soft">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-black text-ink">
-              {completed ? "Mission complete" : nextLevel ? nextLevel.title : "Ready for the next room"}
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-ink/60">
-              {completed
-                ? "Your final identity, movie recommendations, and Film Run are unlocked."
-                : "Scan the room marker in the prototype, answer one quick prompt, and move on."}
-            </p>
-          </div>
+          <p className="text-sm leading-6 text-ink/60">
+            {completed
+              ? "Your final identity, movie recommendations, and Film Run are unlocked."
+              : "Step into the crew. Complete each room's mission, collect credits, and unlock your filmmaker identity."}
+          </p>
           <ButtonLink
             href={completed ? "/mission/result" : `/mission/level/${nextLevel?.id ?? levels[0].id}`}
             icon={completed || level1Done ? ArrowRight : Play}
