@@ -25,12 +25,12 @@ export default function MoviesPage() {
   if (!complete) {
     return (
       <div className="content-wrap space-y-7">
-        <SectionHeader eyebrow="Movies" title="Your personal picks await." />
+        <SectionHeader eyebrow="Movies" title="Our recommendations." />
         <EmptyState
-          action="Finish Mission"
-          body="Movie recommendations unlock after the six-room filmmaker journey."
-          href="/mission"
-          title="Top 5 movies are waiting"
+          action="Take the Quiz"
+          body="Answer a few quick questions about your taste and we'll hand-pick the best Czech films just for you."
+          href="/movies/quiz"
+          title="Find your perfect film match"
         />
       </div>
     );
