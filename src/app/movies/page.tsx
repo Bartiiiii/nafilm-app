@@ -28,7 +28,7 @@ export default function MoviesPage() {
         <SectionHeader eyebrow="Movies" title="Our recommendations." />
         <EmptyState
           action="Take the Quiz"
-          body="Answer a few quick questions about your taste and we'll hand-pick the best Czech films just for you."
+          body="Answer a few questions about your taste and we'll hand-pick the best Czech films just for you."
           href="/movies/quiz"
           title="Find your perfect film match"
         />
