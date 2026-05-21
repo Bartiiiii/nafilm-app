@@ -24,7 +24,8 @@ export default function MoviesPage() {
 
   if (!complete) {
     return (
-      <div className="content-wrap">
+      <div className="content-wrap space-y-7">
+        <SectionHeader eyebrow="Movies" title="Your personal picks await." />
         <EmptyState
           action="Finish Mission"
           body="Movie recommendations unlock after the six-room filmmaker journey."
