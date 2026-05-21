@@ -1,7 +1,9 @@
 "use client";
 
-import { ArrowRight, Clapperboard, Gift, Map, Star, Ticket } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Clapperboard, Gift, Map, Play, Star, Ticket } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
+import { FilmRunOverlay } from "@/components/FilmRunOverlay";
 import { ProgressReel } from "@/components/ProgressReel";
 import { levels } from "@/data/levels";
 import { getLoyaltyStatus, getNextLevel, isMissionComplete } from "@/lib/progress";
@@ -12,6 +14,7 @@ export default function HomePage() {
   const completedIds = progress.completedLevels.map((level) => level.levelId);
   const nextLevel = getNextLevel(progress);
   const loyalty = getLoyaltyStatus(progress);
+  const [gameOpen, setGameOpen] = useState(false);
 
   return (
     <div className="content-wrap space-y-7">
@@ -81,6 +84,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section>
+        <button
+          className="group w-full rounded-md border border-ink/10 bg-ink p-5 text-left shadow-soft transition hover:border-ember/40"
+          onClick={() => setGameOpen(true)}
+          type="button"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-paper/50">Mini-game</p>
+              <h2 className="mt-2 text-2xl font-black text-paper">Film Run.</h2>
+              <p className="mt-1.5 text-sm leading-6 text-paper/60">
+                Dodge obstacles, collect reels, grind for a better score.
+              </p>
+            </div>
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-ember/90 transition group-hover:bg-ember">
+              <Play className="translate-x-0.5 text-paper" fill="currentColor" size={22} />
+            </div>
+          </div>
+          {progress.miniGame.highScore > 0 && (
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-paper/10 px-3 py-1.5">
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-paper/50">Best</span>
+              <span className="text-sm font-black text-paper">{progress.miniGame.highScore}</span>
+            </div>
+          )}
+        </button>
+      </section>
+
       <section className="grid gap-4 lg:grid-cols-3">
         <JourneyCard
           body="Your QR ticket, visit time, address, and mission launch point live together."
@@ -101,6 +131,8 @@ export default function HomePage() {
           title="Rewards"
         />
       </section>
+
+      {gameOpen && <FilmRunOverlay onClose={() => setGameOpen(false)} />}
     </div>
   );
 }
