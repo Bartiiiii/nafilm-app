@@ -22,7 +22,7 @@ export default function MissionPage() {
 
       <section className="rounded-md border border-ink/10 bg-paper/75 p-5 shadow-soft">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm leading-6 text-ink/60">
+          <p className="text-sm leading-6 text-ink">
             {completed
               ? "Your final identity, movie recommendations, and Film Run are unlocked."
               : "Step into the crew. Complete each room's mission, collect credits, and unlock your filmmaker identity."}
