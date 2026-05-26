@@ -211,69 +211,37 @@ export function getReward(id: string) {
   return rewards.find((reward) => reward.id === id);
 }
 
+const RANK_THRESHOLDS: { level: string; min: number; max: number }[] = [
+  { level: "Guest",       min: 0,    max: 99 },
+  { level: "Visitor",     min: 100,  max: 299 },
+  { level: "Trainee",     min: 300,  max: 599 },
+  { level: "Crew Member", min: 600,  max: 999 },
+  { level: "Specialist",  min: 1000, max: 1299 },
+  { level: "Auteur",      min: 1300, max: 1569 },
+  { level: "Cinephile",   min: 1570, max: Infinity },
+];
+
 export function getLoyaltyStatus(progress: UserProgress) {
-  const completedCount = progress.completedLevels.length;
-  const badgeCount = progress.badges.length;
+  const pts = progress.points;
+  const current = RANK_THRESHOLDS.find((r) => pts >= r.min && pts <= r.max) ?? RANK_THRESHOLDS[0];
+  const nextTier = RANK_THRESHOLDS[RANK_THRESHOLDS.indexOf(current) + 1];
 
-  if (isMissionComplete(progress) && progress.savedMovies.length > 0) {
+  if (!nextTier) {
     return {
-      level: "Cinephile",
-      current: progress.savedMovies.length,
-      target: 3,
-      next: "Save more films for later",
-    };
-  }
-
-  if (isMissionComplete(progress)) {
-    return {
-      level: "Auteur",
-      current: 1,
-      target: 1,
-      next: "Save a recommended movie",
-    };
-  }
-
-  if (badgeCount >= 5) {
-    return {
-      level: "Specialist",
-      current: completedCount,
-      target: levels.length,
-      next: "Complete the full mission",
-    };
-  }
-
-  if (completedCount >= 3) {
-    return {
-      level: "Crew Member",
-      current: badgeCount,
-      target: 5,
-      next: "Earn 5 badges",
-    };
-  }
-
-  if (progress.missionStarted) {
-    return {
-      level: "Trainee",
-      current: completedCount,
-      target: 3,
-      next: "Complete 3 levels",
-    };
-  }
-
-  if (progress.ticket) {
-    return {
-      level: "Visitor",
-      current: 0,
-      target: 1,
-      next: "Start the mission",
+      level: current.level,
+      current: pts,
+      target: current.min,
+      creditsToNext: 0,
+      next: "Top rank reached",
     };
   }
 
   return {
-    level: "Guest",
-    current: 0,
-    target: 1,
-    next: "Create a ticket",
+    level: current.level,
+    current: pts - current.min,
+    target: nextTier.min - current.min,
+    creditsToNext: nextTier.min - pts,
+    next: nextTier.level,
   };
 }
 

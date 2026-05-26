@@ -12,7 +12,7 @@ const variants = {
   primary: "bg-ink text-paper hover:bg-ink/90",
   secondary: "bg-paper text-ink ring-1 ring-ink/10 hover:bg-frame",
   quiet: "bg-transparent text-ink hover:bg-ink/5",
-  gold: "bg-[#ecb500] text-white hover:bg-[#d4a300]",
+  gold: "bg-[#17e615] text-black hover:bg-[#13c912]",
 };
 
 export function ButtonLink({ href, children, icon: Icon, variant = "primary" }: ButtonLinkProps) {

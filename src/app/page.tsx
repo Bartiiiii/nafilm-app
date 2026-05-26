@@ -19,21 +19,22 @@ export default function HomePage() {
   return (
     <div className="content-wrap space-y-7">
       <section className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-stretch">
-        <div className="rounded-md bg-ink p-6 text-paper shadow-soft sm:p-8">
-          <div className="mb-4">
+        <div className="relative overflow-hidden rounded-md bg-ink p-6 text-paper shadow-soft sm:p-8" style={{ backgroundImage: "url('/hero-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
+          <div className="absolute inset-0 bg-ink/60" />
+          <div className="relative z-10 mb-4">
             <img
               alt="NaFilM Action"
               className="h-auto w-[5.5rem] sm:w-28"
               height={1488}
-              src="/new-logo-action-white.png"
+              src="/logo-action-green.png"
               width={2000}
             />
           </div>
-          <p className="max-w-2xl text-base leading-7 text-paper/70">
+          <p className="relative z-10 max-w-2xl text-base leading-7 text-paper/70">
             Enhance your museum experience by finishing missions, collecting points, exchanging them
             for rewards, and enjoying movie recommendations made for you!
           </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <div className="relative z-10 mt-7 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/ticket" icon={Ticket} variant="secondary">
               {progress.ticket ? "View Ticket" : "Buy Ticket"}
             </ButtonLink>
@@ -59,7 +60,7 @@ export default function HomePage() {
           <p className="mt-4 text-sm leading-6 text-ink/50">
             {isMissionComplete(progress)
               ? "Mission complete. Your movie picks and the mini-game are unlocked."
-              : `${completedIds.length}/${levels.length} rooms completed. ${loyalty.next}.`}
+              : `${completedIds.length}/${levels.length} rooms completed.`}
           </p>
           <div className="mt-5">
             <ButtonLink href={isMissionComplete(progress) ? "/movies" : "/mission"} icon={ArrowRight}>
@@ -119,7 +120,7 @@ export default function HomePage() {
           title="Ticket"
         />
         <JourneyCard
-          body="Six physical-first missions move you through the museum one short interaction at a time."
+          body="Twelve missions move you through the museum one short interaction at a time."
           href="/mission"
           icon={Map}
           title="Mission"

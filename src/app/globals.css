@@ -20,7 +20,7 @@ body {
   min-height: 100%;
   margin: 0;
   background:
-    linear-gradient(135deg, rgba(206, 90, 53, 0.12), transparent 32rem),
+    linear-gradient(135deg, rgba(23, 230, 21, 0.12), transparent 32rem),
     linear-gradient(315deg, rgba(47, 111, 115, 0.14), transparent 34rem),
     #fbf7ef;
   color: #12100f;

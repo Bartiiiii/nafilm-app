@@ -51,7 +51,13 @@ export default function RewardsPage() {
           </div>
         </div>
         <div className="mt-5 h-3 overflow-hidden rounded-full bg-paper/20">
-          <div className="h-full rounded-full bg-gold" style={{ width: `${loyaltyPercent}%` }} />
+          <div className="h-full rounded-full bg-gold transition-all duration-500" style={{ width: `${loyaltyPercent}%` }} />
+        </div>
+        <div className="mt-2 flex items-center justify-between text-xs font-semibold text-paper/50">
+          {loyalty.creditsToNext > 0 && (
+            <span>{loyalty.creditsToNext} credits more to {loyalty.next}</span>
+          )}
+          <span>{loyalty.current} / {loyalty.target}</span>
         </div>
       </section>
 

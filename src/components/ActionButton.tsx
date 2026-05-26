@@ -12,7 +12,7 @@ const variants = {
   primary: "bg-ink text-paper hover:bg-ink/90 disabled:bg-ink/30",
   secondary: "bg-paper text-ink ring-1 ring-ink/10 hover:bg-frame disabled:text-ink/40",
   quiet: "bg-transparent text-ink hover:bg-ink/5 disabled:text-ink/40",
-  danger: "bg-ember text-paper hover:bg-ember/90 disabled:bg-ember/40",
+  danger: "bg-ember text-black hover:bg-ember/90 disabled:bg-ember/40",
 };
 
 export function ActionButton({
