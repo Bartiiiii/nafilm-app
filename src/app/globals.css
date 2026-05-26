@@ -44,12 +44,12 @@ button {
 
 .page-shell {
   min-height: 100vh;
-  padding: 18px 16px 96px;
+  padding: 18px 16px 108px;
 }
 
 @media (min-width: 768px) {
   .page-shell {
-    padding: 28px 28px 112px;
+    padding: 28px 28px 124px;
   }
 }
 
