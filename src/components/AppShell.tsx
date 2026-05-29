@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clapperboard, Gift, Home, Map, Ticket, UserCircle } from "lucide-react";
+import { Clapperboard, Home, Map, ShoppingBag, UserCircle } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/ticket", label: "Ticket", icon: Ticket },
+  { href: "/ticket", label: "Eshop", icon: ShoppingBag },
   { href: "/mission", label: "Mission", icon: Map },
   { href: "/movies", label: "Movies", icon: Clapperboard },
-  { href: "/rewards", label: "Rewards", icon: Gift },
   { href: "/profile", label: "Profile", icon: UserCircle },
 ];
 
@@ -20,7 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <main className="page-shell">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-ink/10 bg-paper/95 px-2 py-2 shadow-soft backdrop-blur-xl">
-        <div className="mx-auto grid max-w-3xl grid-cols-6 gap-1">
+        <div className="mx-auto grid max-w-3xl grid-cols-5 gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive =

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Clapperboard, Gift, Map, Play, Star, Ticket } from "lucide-react";
+import { ArrowRight, Clapperboard, Map, Play, ShoppingBag, Star, Ticket } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { FilmRunOverlay } from "@/components/FilmRunOverlay";
 import { ProgressReel } from "@/components/ProgressReel";
@@ -114,10 +114,10 @@ export default function HomePage() {
 
       <section className="grid gap-4 lg:grid-cols-3">
         <JourneyCard
-          body="Your QR ticket, visit time, address, and mission launch point live together."
-          href={progress.ticket ? "/ticket/confirmation" : "/ticket"}
-          icon={Ticket}
-          title="Ticket"
+          body="Buy tickets, grab a tote bag, a book, or a poster — take the museum home."
+          href="/ticket"
+          icon={ShoppingBag}
+          title="Eshop"
         />
         <JourneyCard
           body="Twelve missions move you through the museum one short interaction at a time."
@@ -126,10 +126,10 @@ export default function HomePage() {
           title="Mission"
         />
         <JourneyCard
-          body="Credits, badges, movie saves, and discounts stay available after the visit."
-          href="/rewards"
-          icon={Gift}
-          title="Rewards"
+          body="Get personalised film picks, browse the full library, and save titles to revisit later."
+          href="/movies"
+          icon={Clapperboard}
+          title="Movies"
         />
       </section>
 
