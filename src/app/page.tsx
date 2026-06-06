@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Clapperboard, Map, Play, ShoppingBag, Star, Ticket } from "lucide-react";
+import { ArrowRight, Clapperboard, Mail, Map, Play, ShoppingBag, Star, Ticket } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { FilmRunOverlay } from "@/components/FilmRunOverlay";
 import { ProgressReel } from "@/components/ProgressReel";
@@ -131,6 +131,33 @@ export default function HomePage() {
           icon={Clapperboard}
           title="Movies"
         />
+      </section>
+
+      <section>
+        <div className="rounded-md bg-ink p-5 shadow-soft">
+          <Mail className="text-ember" size={28} />
+          <h2 className="mt-4 text-[1.65rem] font-black leading-tight text-paper">
+            Stay close to Czech cinema.
+          </h2>
+          <p className="mt-3 text-[0.95rem] leading-7 text-paper/55">
+            Join the NaFilM newsletter and be the first to know about new exhibitions, special
+            screenings, events at the museum, and exclusive offers.
+          </p>
+          <div className="mt-6 flex gap-3">
+            <input
+              className="min-w-0 flex-1 rounded-md bg-paper/10 px-4 py-3 text-sm text-paper placeholder:text-paper/35 focus:outline-none focus:ring-2 focus:ring-ember/50"
+              placeholder="your@email.com"
+              type="email"
+            />
+            <button
+              className="shrink-0 rounded-md bg-ember px-5 py-3 text-sm font-black text-ink transition hover:opacity-90"
+              type="button"
+            >
+              Subscribe
+            </button>
+          </div>
+          <p className="mt-3 text-sm text-paper/40">No spam, ever. Unsubscribe any time.</p>
+        </div>
       </section>
 
       {gameOpen && <FilmRunOverlay onClose={() => setGameOpen(false)} />}
